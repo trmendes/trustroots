@@ -42,7 +42,7 @@ exports.invokeRolesPolicies = function() {
     roles: ['user'],
     allows: [{
       resources: '/api/users',
-      permissions: ['put']
+      permissions: ['get', 'put']
     }, {
       resources: '/api/users/:username',
       permissions: ['get']

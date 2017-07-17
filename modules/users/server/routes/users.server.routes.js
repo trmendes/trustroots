@@ -10,7 +10,8 @@ module.exports = function(app) {
 
   // Setting up the users profile api
   app.route('/api/users').all(usersPolicy.isAllowed)
-    .put(users.update);
+    .put(users.update)
+    .get(users.search);
 
   app.route('/api/users-avatar').all(usersPolicy.isAllowed)
     .post(users.avatarUploadField, users.avatarUpload);
