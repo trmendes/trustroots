@@ -9,6 +9,7 @@ var _ = require('lodash'),
     facebookNotificationService = require('../../modules/core/server/services/facebook-notification.server.service'),
     languages = require('../languages/languages.json'),
     express = require('express'),
+    mongoose = require('mongoose'),
     morgan = require('morgan'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
@@ -168,7 +169,7 @@ module.exports.initViewEngine = function (app) {
 /**
  * Configure Express session
  */
-module.exports.initSession = function (app, db) {
+module.exports.initSession = function (app) {
   // Express MongoDB session storage
   // https://www.npmjs.com/package/express-session
   app.use(session({
@@ -189,7 +190,7 @@ module.exports.initSession = function (app, db) {
       maxAge: 2419200000 // (in milliseconds) 28 days
     },
     store: new MongoStore({
-      mongooseConnection: db.connection,
+      mongooseConnection: mongoose.connection,
       collection: config.sessionCollection
     })
   }));
@@ -206,9 +207,9 @@ module.exports.initLastSeen = function (app) {
 /**
  * Invoke modules server configuration
  */
-module.exports.initModulesConfiguration = function (app, db) {
+module.exports.initModulesConfiguration = function (app) {
   config.files.server.configs.forEach(function (configPath) {
-    require(path.resolve(configPath))(app, db);
+    require(path.resolve(configPath))(app);
   });
 };
 
@@ -520,7 +521,7 @@ module.exports.initErrorRoutes = function (app) {
 /**
  * Initialize the Express application
  */
-module.exports.init = function (db) {
+module.exports.init = function () {
   // Initialize express app
   var app = express();
 
@@ -540,7 +541,7 @@ module.exports.init = function (db) {
   this.initModulesClientRoutes(app);
 
   // Initialize Express session
-  this.initSession(app, db);
+  this.initSession(app);
 
   // Initialize Modules configuration
   this.initModulesConfiguration(app);

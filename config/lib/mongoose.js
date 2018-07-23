@@ -19,40 +19,27 @@ module.exports.loadModels = function (callback) {
 };
 
 // Initialize Mongoose
-module.exports.connect = function (callback) {
-  var _this = this;
+module.exports.connect = function (callback, logprefix, optionOverride) {
 
-  // Use native promises
-  // You could use any ES6 promise constructor here, e.g. `bluebird`
+  var options = optionOverride ?
+    _.merge(config.db.options || {}, optionOverride) :
+    config.db.options;
+
   mongoose.Promise = global.Promise;
 
-  // Options for Native MongoDB connection
-  // https://mongodb.github.io/node-mongodb-native/2.1/api/Server.html
-  // http://mongoosejs.com/docs/connections.html
-  var mongoConnectionOptions = {
-    server: {
-      // Never stop reconnecting
-      reconnectTries: Number.MAX_VALUE
-    }
-  };
+  mongoose.set('debug', config.db.debug);
 
-  var db = mongoose.connect(config.db.uri, mongoConnectionOptions, function (err) {
-    // Log Error
+  mongoose.connect(config.db.uri, options, function (err) {
     if (err) {
-      console.error(chalk.red('Could not connect to MongoDB!'));
-      console.log(err);
-    } else {
-      // Enabling mongoose debug mode if required
-      mongoose.set('debug', config.db.debug);
-
-      // Load modules
-      _this.loadModels();
-
-      if (callback) {
-        callback(db);
-      }
+      console.error(chalk.red('Could not connect to MongoDb! #fh3924'));
+      return;
+    }
+    console.log(chalk.green('Connected to MongoDB'));
+    if (callback) {
+      callback();
     }
   });
+
 };
 
 module.exports.disconnect = function (callback) {

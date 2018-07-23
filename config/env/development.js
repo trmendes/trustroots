@@ -12,13 +12,12 @@
 
 module.exports = {
   db: {
-    uri: 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/trustroots-dev',
+    uri: 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost:27017') + '/trustroots-dev',
     options: {
-      auth: {
-        authMechanism: ''
-      }
-      // user: '',
-      // pass: ''
+      autoIndex: true,
+      reconnectInterval: 500,
+      bufferMaxEntries: 0,
+      useNewUrlParser: true
     },
     // Mongoose debug mode
     debug: true
