@@ -17,7 +17,7 @@ RUN apt-get -qq update && apt-get -q install -y \
 
 # Install Dump-init
 # https://github.com/Yelp/dumb-init
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.0.0/dumb-init_1.0.0_amd64.deb
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb
 RUN dpkg -i dumb-init_*.deb
 
 # Install global node modules
